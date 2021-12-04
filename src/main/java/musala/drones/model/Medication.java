@@ -31,4 +31,8 @@ public class Medication implements Serializable {
     @Lob
     @Column(name ="img_of_medication", nullable = false)
     private byte[] image;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "drone_id", nullable = false)
+    private Drone drone;
 }
