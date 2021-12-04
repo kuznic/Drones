@@ -8,20 +8,22 @@ import musala.drones.utility.enums.DroneState;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.UUID;
 
 @Entity
 @Slf4j
 @Data
-@Table(name = "drones", uniqueConstraints =  {@UniqueConstraint(name = "UniqueSerialNumber", columnNames = { "serial_number",   })})
-        public class Drone {
+@Table(name = "drones", uniqueConstraints =  {@UniqueConstraint(name = "UniqueSerialNumber", columnNames = { "serial_number",})})
+public class Drone implements Serializable {
+    private static final long serialVersionId = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id", nullable = false, updatable = false)
     private Long id;
 
-    @Column(name = "drone_id", updatable = false, nullable = false, length = 32, columnDefinition = "uuid")
+    @Column(name = "drone_uid", updatable = false, nullable = false, length = 32, columnDefinition = "uuid")
     private UUID uid;
 
     @Column(name = "serial_number", nullable = false, updatable = false, length = 100)
