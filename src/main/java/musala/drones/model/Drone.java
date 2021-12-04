@@ -5,20 +5,26 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import musala.drones.utility.enums.DroneModel;
 import musala.drones.utility.enums.DroneState;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
+import java.util.UUID;
 
 @Entity
 @Slf4j
 @Data
-public class Drone {
+@Table(name = "drones", uniqueConstraints =  {@UniqueConstraint(name = "UniqueSerialNumber", columnNames = { "serial_number",   })})
+        public class Drone {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id", nullable = false, updatable = false)
     private Long id;
 
-    @Column(name = "serial_number", nullable = false, updatable = false, length = 100,unique = true)
+    @Column(name = "drone_id", updatable = false, nullable = false, length = 32, columnDefinition = "uuid")
+    private UUID uid;
+
+    @Column(name = "serial_number", nullable = false, updatable = false, length = 100)
     private String serialNumber;
 
     @Enumerated(EnumType.STRING)
@@ -28,7 +34,7 @@ public class Drone {
     @Column(name = "weight_lim_in_gr",nullable = false,updatable = false)
     private int weightLimit;
 
-    @Column(name = "battery_capacity",precision = 5, scale = 2, nullable = false)
+    @Column(name = "battery_capacity",precision = 5, scale = 2, nullable = false, columnDefinition = "decimal(5,2)")
     private float batteryCapacity;
 
     @Enumerated(EnumType.STRING)
