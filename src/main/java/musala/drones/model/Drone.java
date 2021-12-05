@@ -46,7 +46,7 @@ public class Drone implements Serializable {
     @Column(name= "loaded_weight",columnDefinition = "integer default 0", nullable = false)
     private int weight;
 
-    @OneToMany(mappedBy = "drone", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "drone", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     private List<Medication> medications ;
 
 
