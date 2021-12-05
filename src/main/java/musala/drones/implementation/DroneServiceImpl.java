@@ -16,10 +16,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -74,14 +74,8 @@ public class DroneServiceImpl implements DroneService {
         newDrone.setDroneState(DroneState.IDLE);
         newDrone = droneRepo.save(newDrone);
 
+        BeanUtils.copyProperties(newDrone, registeredDrone, "id");
         registeredDrone.setDroneId(newDrone.getUid());
-        registeredDrone.setDroneModel(newDrone.getDroneModel());
-        registeredDrone.setDroneState(newDrone.getDroneState());
-        registeredDrone.setBatteryCapacity(newDrone.getBatteryCapacity());
-        registeredDrone.setLoadedWeight(newDrone.getWeight());
-        registeredDrone.setSerialNumber(newDrone.getSerialNumber());
-        registeredDrone.setWeightLimit(newDrone.getWeightLimit());
-        registeredDrone.setMedications(newDrone.getMedications());
 
         baseResponse.setData(registeredDrone);
         baseResponse.setCode(HttpStatus.CREATED.value());
@@ -93,7 +87,6 @@ public class DroneServiceImpl implements DroneService {
 
 
     @Override
-    @Transactional
     public BaseResponseDto getDroneList(Pageable page) {
         return Mono.just(page)
                 .subscribeOn(Schedulers.parallel())
@@ -106,8 +99,58 @@ public class DroneServiceImpl implements DroneService {
                 }).block();
     }
 
+    @Override
+    public BaseResponseDto getDrone(UUID droneUid) {
+        var drone = droneRepo.findByUid(droneUid);
+        var droneResponseDto = new DroneRegistrationResponseDto();
+        var baseResponseDto = new BaseResponseDto();
 
+        if(drone == null)
+        {
+            throw new BadRequestException("Drone with provided Id has not been registered");
+        }
+
+        BeanUtils.copyProperties(drone,droneResponseDto, "id");
+        droneResponseDto.setDroneId(droneUid);
+        baseResponseDto.setData(droneResponseDto);
+        baseResponseDto.setCode(HttpStatus.OK.value());
+        baseResponseDto.setMessage(HttpStatus.OK.getReasonPhrase());
+
+        return baseResponseDto;
+    }
+
+    @Override
     @Transactional
+    public BaseResponseDto prepareDroneForLoading(UUID droneUid) {
+        var drone = droneRepo.findByUid(droneUid);
+        var baseResponseDto = new BaseResponseDto();
+        if(drone.getBatteryCapacity() < 25)
+        {
+            throw new BadRequestException("Battery is too low for drone to be loaded");
+        }
+        drone.setDroneState(DroneState.LOADING);
+        droneRepo.save(drone);
+
+        baseResponseDto.setCode(HttpStatus.OK.value());
+        baseResponseDto.setMessage("Drone is ready for loading");
+
+        return baseResponseDto;
+    }
+
+    @Override
+    public BaseResponseDto getAvailableDronesForLoading(Pageable page) {
+        return Mono.just(page)
+                .subscribeOn(Schedulers.parallel())
+                .map(pageable->{
+                    var baseResponseDto = new BaseResponseDto();
+                    baseResponseDto.setCode(HttpStatus.OK.value());
+                    baseResponseDto.setMessage(HttpStatus.OK.getReasonPhrase());
+                    baseResponseDto.setData(generateDroneResponseDto(droneRepo.getAllDrones(page)));
+                    return baseResponseDto;
+                }).block();
+    }
+
+
     private List<DroneRegistrationResponseDto> generateDroneResponseDto(List<Drone> droneList){
 
         return droneList.stream()
@@ -115,13 +158,7 @@ public class DroneServiceImpl implements DroneService {
                     var droneResponseDto = new DroneRegistrationResponseDto();
                     BeanUtils.copyProperties(drone,droneResponseDto,"id");
                     droneResponseDto.setDroneId(drone.getUid());
-                    droneResponseDto.setMedications(drone.getMedications());
-                    droneResponseDto.setDroneState(drone.getDroneState());
-                    droneResponseDto.setDroneModel(drone.getDroneModel());
-                    droneResponseDto.setWeightLimit(drone.getWeightLimit());
-                    droneResponseDto.setLoadedWeight(drone.getWeight());
                     droneResponseDto.setBatteryCapacity(drone.getBatteryCapacity());
-                    droneResponseDto.setSerialNumber(drone.getSerialNumber());
                     return droneResponseDto;
                 }).collect(Collectors.toList());
     }

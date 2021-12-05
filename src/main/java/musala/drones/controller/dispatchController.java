@@ -10,12 +10,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Slf4j
@@ -38,12 +40,30 @@ public class dispatchController {
 
     @GetMapping()
     @ResponseStatus(HttpStatus.OK)
-    public  ResponseEntity<BaseResponseDto>getAllDrones(@RequestParam(defaultValue = "0") int page,@RequestParam(defaultValue = "100") int size) {
-        {
-            //User user = userRepo.findById(JwtTokenProvider.loggedId.intValue()).get();
+    public  ResponseEntity<BaseResponseDto>getAllDrones(@RequestParam(defaultValue = "0") int page,@RequestParam(defaultValue = "100") int size)
+    {
             Pageable pageable = PageRequest.of(page, size, Sort.by("id"));
             return ResponseEntity.ok().body(droneService.getDroneList(pageable));
-        }
+    }
+
+    @GetMapping("/{droneUid}")
+  public ResponseEntity<?> getDrone(@PathVariable("droneUid") UUID droneUid)
+    {
+        return ResponseEntity.ok(droneService.getDrone(droneUid));
+    }
+
+    @PatchMapping("/{droneUid}")
+   public ResponseEntity<?> prepareDroneForLoading(@PathVariable("droneUid") UUID droneUid)
+    {
+        return ResponseEntity.ok(droneService.prepareDroneForLoading(droneUid));
+    }
+
+    @GetMapping("/available-for-loading")
+    @ResponseStatus(HttpStatus.OK)
+    public  ResponseEntity<BaseResponseDto>getAllAvailableDrones(@RequestParam(defaultValue = "0") int page,@RequestParam(defaultValue = "100") int size)
+    {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("id"));
+        return ResponseEntity.ok().body(droneService.getAvailableDronesForLoading(pageable));
     }
 
 }
