@@ -5,15 +5,12 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import musala.drones.utility.enums.DroneModel;
 import musala.drones.utility.enums.DroneState;
-
 import javax.persistence.*;
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -32,7 +29,7 @@ public class Drone implements Serializable {
     private UUID uid;
 
     @Column(name = "serial_number", nullable = false, updatable = false, length = 100)
-    @Size(max = 100,message="{drone.allowed.serialNumberSize}")
+    @Size(max = 100,message="The Serial number cannot be more than 100 characters")
     private String serialNumber;
 
     @Enumerated(EnumType.STRING)
@@ -43,8 +40,8 @@ public class Drone implements Serializable {
     private int weightLimit;
 
     @Column(name = "battery_capacity", nullable = false, columnDefinition = "tinyint")
-    @DecimalMax(value="100", message = "{drone.max.batteryCapacity}")
-    @DecimalMin(value="0", message = "{drone.min.batteryCapacity}")
+    @DecimalMax(value="100", message = "The maximum battery capacity is 100 percent")
+    @DecimalMin(value="0", message = "The minimum battery capacity is 1 percent")
     private int batteryCapacity;
 
     @Enumerated(EnumType.STRING)

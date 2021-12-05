@@ -21,14 +21,14 @@ public class Medication implements Serializable {
     private UUID uid;
 
     @Column(name = "name_of_medication", nullable = false)
-    @Pattern(regexp = "^[a-zA-Z0-9_-]*$",message = "{medication.allowed.nameCharacters}")
+    @Pattern(regexp = "^[a-zA-Z0-9_-]*$",message = "Only letters, numbers, underscore and dash are allowed")
     private String name;
 
     @Column(name = "weight_of_medication_in_gr",nullable = false)
     private int weight;
 
     @Column(name = "medication_code", nullable = false )
-    @Pattern(regexp = "^[A-Z0-9_]*$",message = "{medication.allowed.codeCharacters}")
+    @Pattern(regexp = "^[A-Z0-9_]*$",message = "Only upper case letters, underscore and numbers are allowed")
     private String code;
 
     @Lob
