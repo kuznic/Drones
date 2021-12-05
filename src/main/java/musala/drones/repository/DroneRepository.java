@@ -8,7 +8,7 @@ import java.util.UUID;
 
 
 @Repository
-public interface DroneRepo extends JpaRepository<Drone, UUID>, JpaSpecificationExecutor<Drone> {
+public interface DroneRepository extends JpaRepository<Drone, Long>, JpaSpecificationExecutor<Drone> {
     Drone findByUid(UUID droneUid);
 
 

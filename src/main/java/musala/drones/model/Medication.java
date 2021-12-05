@@ -4,6 +4,7 @@ package musala.drones.model;
 import lombok.Data;
 
 import javax.persistence.*;
+import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 import java.util.UUID;
 
@@ -19,13 +20,15 @@ public class Medication implements Serializable {
     @Column(name = "medication_uid", updatable = false, nullable = false, length = 32, columnDefinition = "uuid")
     private UUID uid;
 
-    @Column(name = "name_of_medication", nullable = false )
+    @Column(name = "name_of_medication", nullable = false)
+    @Pattern(regexp = "^[a-zA-Z0-9_-]*$",message = "{medication.allowed.nameCharacters}")
     private String name;
 
     @Column(name = "weight_of_medication_in_gr",nullable = false)
     private int weight;
 
     @Column(name = "medication_code", nullable = false )
+    @Pattern(regexp = "^[A-Z0-9_]*$",message = "{medication.allowed.codeCharacters}")
     private String code;
 
     @Lob
