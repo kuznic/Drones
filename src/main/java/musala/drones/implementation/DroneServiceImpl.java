@@ -5,9 +5,11 @@ import lombok.var;
 import musala.drones.dto.BaseResponseDto;
 import musala.drones.dto.DroneRegistrationDto;
 import musala.drones.dto.DroneRegistrationResponseDto;
+import musala.drones.exception.BadRequestException;
 import musala.drones.model.Drone;
 import musala.drones.repository.DroneRepository;
 import musala.drones.service.DroneService;
+import musala.drones.utility.enums.DroneModel;
 import musala.drones.utility.enums.DroneState;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,36 @@ public class DroneServiceImpl implements DroneService {
         var newDrone = new Drone();
         var baseResponse = new BaseResponseDto();
         var registeredDrone = new DroneRegistrationResponseDto();
+
+        if(drone.getBatteryCapacity() > 100 || drone.getBatteryCapacity() < 1)
+        {
+            throw new BadRequestException("Battery capacity cannot be more than 100 or less than 1");
+        }
+
+        if(drone.getWeightLimit() > 500)
+        {
+            throw new BadRequestException("Weight Limit cannot be more than 500gr");
+        }
+
+        switch(drone.getDroneModel().toUpperCase())
+        {
+            case "LIGHTWEIGHT":
+                newDrone.setDroneModel(DroneModel.LIGHTWEIGHT);
+                break;
+
+            case "MIDDLEWEIGHT":
+                newDrone.setDroneModel(DroneModel.MIDDLEWEIGHT);
+                break;
+            case "CRUISERWEIGHT":
+                newDrone.setDroneModel(DroneModel.CRUISERWEIGHT);
+                break;
+            case "HEAVYWEIGHT":
+                newDrone.setDroneModel(DroneModel.HEAVYWEIGHT);
+                break;
+            default:
+                throw new BadRequestException("Invalid Drone Model specified");
+
+        }
 
 
         BeanUtils.copyProperties(drone, newDrone);
