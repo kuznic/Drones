@@ -92,5 +92,10 @@ public class dispatchController {
         return ResponseEntity.ok().body(medicationService.getAllDroneMedications(droneUid,pageable));
     }
 
+    @GetMapping("/battery-level/{droneUid}")
+    public ResponseEntity<?> getDroneBatteryLevel(@PathVariable("droneUid") UUID droneUid) {
+        return ResponseEntity.ok(droneService.getDroneBatteryLevel(droneUid));
+    }
+
 
 }

@@ -14,5 +14,6 @@ public interface DroneService {
     BaseResponseDto getDrone(UUID droneUid);
     BaseResponseDto prepareDroneForLoading(UUID droneUid);
     BaseResponseDto getAvailableDronesForLoading(Pageable page);
+    BaseResponseDto getDroneBatteryLevel(UUID droneUid);
 
 }

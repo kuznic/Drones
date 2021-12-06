@@ -3,6 +3,7 @@ package musala.drones.implementation;
 import lombok.extern.slf4j.Slf4j;
 import lombok.var;
 import musala.drones.dto.BaseResponseDto;
+import musala.drones.dto.BatteryLevelDto;
 import musala.drones.dto.DroneRegistrationDto;
 import musala.drones.dto.DroneRegistrationResponseDto;
 import musala.drones.exception.BadRequestException;
@@ -114,6 +115,8 @@ public class DroneServiceImpl implements DroneService {
 
         BeanUtils.copyProperties(drone,droneResponseDto, "id");
         droneResponseDto.setDroneId(droneUid);
+        droneResponseDto.setLoadedWeight(drone.getWeight());
+        droneResponseDto.setBatteryCapacity(drone.getBatteryCapacity());
         baseResponseDto.setData(droneResponseDto);
         baseResponseDto.setCode(HttpStatus.OK.value());
         baseResponseDto.setMessage(HttpStatus.OK.getReasonPhrase());
@@ -161,6 +164,30 @@ public class DroneServiceImpl implements DroneService {
                     return baseResponseDto;
                 }).block();
     }
+
+    @Override
+    public BaseResponseDto getDroneBatteryLevel(UUID droneUid)
+        {
+            var drone = droneRepo.findByUid(droneUid);
+            var baseResponseDto = new BaseResponseDto();
+            var battLevelDto = new BatteryLevelDto();
+
+            if(drone == null)
+            {
+                throw new BadRequestException("Drone with provided Id has not been registered");
+            }
+
+
+            battLevelDto.setBatteryLevel(drone.getBatteryCapacity());
+
+            baseResponseDto.setData(battLevelDto);
+            baseResponseDto.setCode(HttpStatus.OK.value());
+            baseResponseDto.setMessage(HttpStatus.OK.getReasonPhrase());
+
+            return baseResponseDto;
+        }
+
+
 
 
     private List<DroneRegistrationResponseDto> generateDroneResponseDto(List<Drone> droneList){
