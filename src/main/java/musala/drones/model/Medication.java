@@ -29,9 +29,9 @@ public class Medication implements Serializable {
     @Column(name = "medication_code", nullable = false )
     private String code;
 
-    @Lob
-    @Column(name ="img_of_medication", nullable = false)
-    private byte[] image;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "img_of_medication", referencedColumnName = "id")
+    private MedicationImage image;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "drone_id", nullable = false)

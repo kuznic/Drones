@@ -80,10 +80,9 @@ public class dispatchController {
         if (file == null) throw new NotFoundException("document not found");
         byte[] bytes = file.getBytes();
         var medicationDto = medicationService.getJson(medication);
-        medicationDto.setImage(bytes);
         //return ResponseEntity.ok().body("success");
 
-        return ResponseEntity.ok().body(medicationService.addMedication(medicationDto));
+        return ResponseEntity.ok().body(medicationService.addMedication(medicationDto, bytes));
     }
 
 

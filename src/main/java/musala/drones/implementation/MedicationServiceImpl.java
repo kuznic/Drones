@@ -9,6 +9,7 @@ import musala.drones.dto.*;
 import musala.drones.exception.BadRequestException;
 import musala.drones.model.Drone;
 import musala.drones.model.Medication;
+import musala.drones.model.MedicationImage;
 import musala.drones.repository.DroneRepository;
 import musala.drones.repository.MedicationRepository;
 import musala.drones.service.DroneService;
@@ -41,11 +42,12 @@ public class MedicationServiceImpl implements MedicationService {
 
     @Override
     @Transactional
-    public BaseResponseDto addMedication(MedicationDto medicationDto) {
+    public BaseResponseDto addMedication(MedicationDto medicationDto, byte[] image) {
         var medication = new Medication();
         var baseResponse = new BaseResponseDto();
         var medicationResponseDto = new MedicationResponseDto();
         var drone = droneRepo.findByUid(medicationDto.getDroneId());
+        var medicationImage = new MedicationImage();
 
         if(drone == null)
         {
@@ -66,10 +68,11 @@ public class MedicationServiceImpl implements MedicationService {
         drone = droneRepo.save(drone);
 
 
-
+        medicationImage.setImage(image);
 
         BeanUtils.copyProperties(medicationDto, medication, "drone");
         medication.setDrone(drone);
+        medication.setImage(medicationImage);
         medication = medicationRepo.save(medication);
 
         BeanUtils.copyProperties(medication,medicationResponseDto, "id", "drone");

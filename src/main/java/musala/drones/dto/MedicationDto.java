@@ -17,5 +17,4 @@ public class MedicationDto {
     @Pattern(regexp = "^[A-Z0-9_]*$",message = "Only upper case letters, underscore and numbers are allowed")
     private String code;
     private UUID droneId;
-    private byte[] image;
 }

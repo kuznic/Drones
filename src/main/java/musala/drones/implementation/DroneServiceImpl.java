@@ -1,5 +1,6 @@
 package musala.drones.implementation;
 
+import com.sun.org.apache.xml.internal.security.exceptions.Base64DecodingException;
 import lombok.extern.slf4j.Slf4j;
 import lombok.var;
 import musala.drones.dto.BaseResponseDto;
@@ -129,6 +130,16 @@ public class DroneServiceImpl implements DroneService {
         if(drone.getBatteryCapacity() < 25)
         {
             throw new BadRequestException("Battery is too low for drone to be loaded");
+        }
+
+        if(drone.getDroneState().equals(DroneState.LOADING))
+        {
+            throw new BadRequestException("Drone is already in LOADING state");
+        }
+
+        if(drone.getWeight() == drone.getWeightLimit())
+        {
+            throw new BadRequestException("Drone cannot be loaded as the maximum drone weight has been reached");
         }
         drone.setDroneState(DroneState.LOADING);
         droneRepo.save(drone);
