@@ -18,17 +18,15 @@ public class Medication implements Serializable {
     private Long id;
 
     @Column(name = "medication_uid", updatable = false, nullable = false, length = 32, columnDefinition = "uuid")
-    private UUID uid;
+    private UUID uid = UUID.randomUUID();
 
     @Column(name = "name_of_medication", nullable = false)
-    @Pattern(regexp = "^[a-zA-Z0-9_-]*$",message = "Only letters, numbers, underscore and dash are allowed")
     private String name;
 
     @Column(name = "weight_of_medication_in_gr",nullable = false)
     private int weight;
 
     @Column(name = "medication_code", nullable = false )
-    @Pattern(regexp = "^[A-Z0-9_]*$",message = "Only upper case letters, underscore and numbers are allowed")
     private String code;
 
     @Lob

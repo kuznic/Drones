@@ -23,7 +23,7 @@ public class Drone implements Serializable {
     private Long id;
 
     @Column(name = "drone_uid", updatable = false, nullable = false, length = 32, columnDefinition = "uuid")
-    private UUID uid;
+    private UUID uid = UUID.randomUUID();
 
     @Column(name = "serial_number", nullable = false, updatable = false, length = 100)
     private String serialNumber;

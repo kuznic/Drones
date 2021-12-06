@@ -72,10 +72,12 @@ public class DroneServiceImpl implements DroneService {
 
         //newDrone.setUid(UUID.randomUUID());
         newDrone.setDroneState(DroneState.IDLE);
+        //newDrone.setBatteryCapacity(drone.getBatteryCapacity());
         newDrone = droneRepo.save(newDrone);
 
         BeanUtils.copyProperties(newDrone, registeredDrone, "id");
         registeredDrone.setDroneId(newDrone.getUid());
+        registeredDrone.setBatteryCapacity(newDrone.getBatteryCapacity());
 
         baseResponse.setData(registeredDrone);
         baseResponse.setCode(HttpStatus.CREATED.value());
