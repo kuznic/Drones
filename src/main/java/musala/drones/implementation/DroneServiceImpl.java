@@ -16,6 +16,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
@@ -179,6 +180,7 @@ public class DroneServiceImpl implements DroneService {
 
 
             battLevelDto.setBatteryLevel(drone.getBatteryCapacity());
+            battLevelDto.setDroneID(drone.getId());
 
             baseResponseDto.setData(battLevelDto);
             baseResponseDto.setCode(HttpStatus.OK.value());
@@ -187,7 +189,19 @@ public class DroneServiceImpl implements DroneService {
             return baseResponseDto;
         }
 
+    @Override
+    @Scheduled(fixedRate = 100000)
+    public void checkDronesBattLevels() {
+        List<BatteryLevelDto> battLevels  =  droneRepo.findAll().stream()
+                .map(drones-> {
+                    var batteryLevel = new BatteryLevelDto();
+                    batteryLevel.setBatteryLevel(drones.getBatteryCapacity());
+                    batteryLevel.setDroneID(drones.getId());
+                    return batteryLevel;
+                }).collect(Collectors.toList());
+        log.info(battLevels.toString());
 
+    }
 
 
     private List<DroneRegistrationResponseDto> generateDroneResponseDto(List<Drone> droneList){

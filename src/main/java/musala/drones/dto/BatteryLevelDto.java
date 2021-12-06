@@ -5,12 +5,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 
-
 @Data
 @Slf4j
 @Component
 public class BatteryLevelDto{
+    private Long droneID;
     private int batteryLevel;
+
 
 
 }

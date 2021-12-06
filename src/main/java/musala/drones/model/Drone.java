@@ -1,20 +1,26 @@
 package musala.drones.model;
 
 
-import lombok.Data;
+import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import musala.drones.utility.enums.DroneModel;
 import musala.drones.utility.enums.DroneState;
+import org.hibernate.Hibernate;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Entity
 @Slf4j
-@Data
+@Getter
+@Setter
+@ToString
+@RequiredArgsConstructor
 @Table(name = "drones", uniqueConstraints =  {@UniqueConstraint(name = "UniqueSerialNumber", columnNames = { "serial_number",})})
-public class Drone implements Serializable {
+public class Drone extends AbstractAuditingEntity implements Serializable {
     private static final long serialVersionId = 1L;
 
     @Id
@@ -50,6 +56,16 @@ public class Drone implements Serializable {
     private List<Medication> medications ;
 
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        Drone drone = (Drone) o;
+        return id != null && Objects.equals(id, drone.id);
+    }
 
-
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }

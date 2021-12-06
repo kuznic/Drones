@@ -1,17 +1,21 @@
 package musala.drones.model;
 
 
-import lombok.Data;
+import lombok.*;
+import org.hibernate.Hibernate;
 
 import javax.persistence.*;
-import javax.validation.constraints.Pattern;
 import java.io.Serializable;
+import java.util.Objects;
 import java.util.UUID;
 
 @Entity
-@Data
+@Getter
+@Setter
+@ToString
+@RequiredArgsConstructor
 @Table(name = "medications",  uniqueConstraints =  {@UniqueConstraint(name = "UniqueName", columnNames = { "name_of_medication",})})
-public class Medication implements Serializable {
+public class Medication extends AbstractAuditingEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id", nullable = false, updatable = false)
@@ -36,4 +40,17 @@ public class Medication implements Serializable {
     @ManyToOne(optional = false)
     @JoinColumn(name = "drone_id", nullable = false)
     private Drone drone;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        Medication that = (Medication) o;
+        return id != null && Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }
