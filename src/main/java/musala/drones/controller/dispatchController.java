@@ -79,10 +79,17 @@ public class dispatchController {
     {
         if (file == null) throw new NotFoundException("document not found");
         byte[] bytes = file.getBytes();
-        var medicationDto = medicationService.getJson(medication);
-        //return ResponseEntity.ok().body("success");
+
+        MedicationDto medicationDto = medicationService.getJson(medication);
 
         return ResponseEntity.ok().body(medicationService.addMedication(medicationDto, bytes));
+    }
+
+    @GetMapping("/drone-medications/{droneUid}")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<BaseResponseDto> getAllDroneMedications(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "100") int size, @PathVariable("droneUid") UUID droneUid) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("id"));
+        return ResponseEntity.ok().body(medicationService.getAllDroneMedications(droneUid,pageable));
     }
 
 

@@ -30,7 +30,7 @@ public class Medication implements Serializable {
     private String code;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "img_of_medication", referencedColumnName = "id")
+    @JoinColumn(name = "img_id_of_medication", referencedColumnName = "id")
     private MedicationImage image;
 
     @ManyToOne(optional = false)

@@ -1,6 +1,5 @@
 package musala.drones.implementation;
 
-import com.sun.org.apache.xml.internal.security.exceptions.Base64DecodingException;
 import lombok.extern.slf4j.Slf4j;
 import lombok.var;
 import musala.drones.dto.BaseResponseDto;
@@ -76,7 +75,7 @@ public class DroneServiceImpl implements DroneService {
         //newDrone.setBatteryCapacity(drone.getBatteryCapacity());
         newDrone = droneRepo.save(newDrone);
 
-        BeanUtils.copyProperties(newDrone, registeredDrone, "id");
+        BeanUtils.copyProperties(newDrone, registeredDrone, "id","medications");
         registeredDrone.setDroneId(newDrone.getUid());
         registeredDrone.setBatteryCapacity(newDrone.getBatteryCapacity());
 
@@ -172,6 +171,7 @@ public class DroneServiceImpl implements DroneService {
                     BeanUtils.copyProperties(drone,droneResponseDto,"id");
                     droneResponseDto.setDroneId(drone.getUid());
                     droneResponseDto.setBatteryCapacity(drone.getBatteryCapacity());
+                    droneResponseDto.setLoadedWeight(drone.getWeight());
                     return droneResponseDto;
                 }).collect(Collectors.toList());
     }

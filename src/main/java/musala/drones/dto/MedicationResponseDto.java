@@ -19,5 +19,5 @@ public class MedicationResponseDto {
     private int weight;
     private String code;
     private UUID droneId;
-    private byte[] image;
+    private UUID imageId;
 }

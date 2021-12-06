@@ -12,5 +12,5 @@ INSERT INTO drones (id,serial_number,drone_model,battery_capacity,weight_lim_in_
 INSERT INTO drones (id,serial_number,drone_model,battery_capacity,weight_lim_in_gr,drone_state,drone_uid) VALUES (100,'1345','LIGHTWEIGHT',85,100,'IDLE', '06364cbc-9468-4bfe-a917-1ab640bd49f1');
 
 
-
---INSERT INTO medications (id,medication_uid,name_of_medication,weight_of_medication_in_gr,)
+--INSERT INTO medication_images(ID, IMG_OF_MEDICATION, MED_IMG_UID) VALUES (2, 'ffdeab', 'ae50110e-a6e0-415d-8733-fb3a1bc3d5e5')
+--INSERT INTO medications (ID,MEDICATION_CODE,NAME_OF_MEDICATION,MEDICATION_UID,WEIGHT_OF_MEDICATION_IN_GR,DRONE_ID,IMG_ID_OF_MEDICATION) VALUES (10,	'CODE2',	'Propani',	'ae29110e-a6e0-435d-8733-fb3a1bc3d5e5',	40,	20,	2)
