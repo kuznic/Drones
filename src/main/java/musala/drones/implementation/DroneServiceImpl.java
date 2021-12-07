@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
@@ -83,7 +84,7 @@ public class DroneServiceImpl implements DroneService {
 
         baseResponse.setData(registeredDrone);
         baseResponse.setCode(HttpStatus.CREATED.value());
-        baseResponse.setMessage(HttpStatus.CREATED.getReasonPhrase());
+        baseResponse.setMessage("Drone has been successfully registered");
 
 
         return baseResponse;
@@ -161,7 +162,7 @@ public class DroneServiceImpl implements DroneService {
                     var baseResponseDto = new BaseResponseDto();
                     baseResponseDto.setCode(HttpStatus.OK.value());
                     baseResponseDto.setMessage(HttpStatus.OK.getReasonPhrase());
-                    baseResponseDto.setData(generateDroneResponseDto(droneRepo.getAllDrones(page)));
+                    baseResponseDto.setData(generateDroneResponseDto(droneRepo.getAllDronesAvailableForLoading(page)));
                     return baseResponseDto;
                 }).block();
     }

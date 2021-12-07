@@ -6,7 +6,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -17,9 +16,8 @@ import java.util.UUID;
 public interface DroneRepository extends JpaRepository<Drone, Long>, JpaSpecificationExecutor<Drone> {
     Drone findByUid(UUID droneUid);
     Page<Drone> findAll(Pageable pageable);
-
     @Query(value="SELECT * FROM drones  WHERE drone_state='LOADING'",nativeQuery=true)
-    List<Drone> getAllDrones(Pageable pageable);
+    List<Drone> getAllDronesAvailableForLoading(Pageable pageable);
 
 
 

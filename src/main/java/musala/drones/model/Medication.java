@@ -33,9 +33,12 @@ public class Medication extends AbstractAuditingEntity implements Serializable {
     @Column(name = "medication_code", nullable = false )
     private String code;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "img_id_of_medication", referencedColumnName = "id")
-    private MedicationImage image;
+    @Column(name = "med_img_uid", updatable = false, nullable = false, length = 32, columnDefinition = "uuid")
+    private UUID img_uid = UUID.randomUUID();
+
+    @Lob
+    @Column(name ="img_of_medication", nullable = false)
+    private byte[] image;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "drone_id", nullable = false)

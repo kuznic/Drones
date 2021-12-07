@@ -1,6 +1,7 @@
 package musala.drones.dto;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +14,7 @@ import java.util.UUID;
 @Slf4j
 @Component
 @JsonInclude(JsonInclude.Include.NON_NULL)
+//@JsonIgnoreProperties(value)
 public class DroneRegistrationResponseDto {
     private UUID droneId;
     private String serialNumber;

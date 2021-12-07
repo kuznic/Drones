@@ -10,17 +10,12 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.UUID;
 
 
 @Repository
-public interface MedicationRepository extends JpaRepository<Medication, Long>, JpaSpecificationExecutor<Drone> {
-    Drone findByUid(UUID medicationUid);
-
+public interface MedicationRepository extends JpaRepository<Medication, Long>, JpaSpecificationExecutor<Drone>
+{
     @Query(value="SELECT * FROM medications  WHERE drone_id=:droneId",nativeQuery=true)
     List<Medication> getAllMedicationsForDrone(@Param ("droneId")Long droneId, Pageable pageable);
-
-
-
 
 }

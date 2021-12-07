@@ -7,7 +7,6 @@ import lombok.var;
 import musala.drones.dto.*;
 import musala.drones.exception.BadRequestException;
 import musala.drones.model.Medication;
-import musala.drones.model.MedicationImage;
 import musala.drones.repository.DroneRepository;
 import musala.drones.repository.MedicationRepository;
 import musala.drones.service.MedicationService;
@@ -43,7 +42,7 @@ public class MedicationServiceImpl implements MedicationService {
         var baseResponse = new BaseResponseDto();
         var medicationResponseDto = new MedicationResponseDto();
         var drone = droneRepo.findByUid(medicationDto.getDroneId());
-        var medicationImage = new MedicationImage();
+
 
         if(!medicationDto.getName().matches("^[a-zA-Z0-9_-]*$"))
         {
@@ -74,17 +73,17 @@ public class MedicationServiceImpl implements MedicationService {
         drone = droneRepo.save(drone);
 
 
-        medicationImage.setImage(image);
+
 
         BeanUtils.copyProperties(medicationDto, medication, "drone");
         medication.setDrone(drone);
-        medication.setImage(medicationImage);
+        medication.setImage(image);
         medication = medicationRepo.save(medication);
 
         BeanUtils.copyProperties(medication,medicationResponseDto, "id", "drone");
         medicationResponseDto.setMedicationId(medication.getUid());
         medicationResponseDto.setDroneId(medication.getDrone().getUid());
-        medicationResponseDto.setImageId(medication.getImage().getUid());
+        medicationResponseDto.setImageId(medication.getImg_uid());
         baseResponse.setData(medicationResponseDto);
         baseResponse.setCode(HttpStatus.CREATED.value());
 
@@ -128,6 +127,8 @@ public class MedicationServiceImpl implements MedicationService {
                     BeanUtils.copyProperties(medication,medicationResponseDto,"id");
                     medicationResponseDto.setMedicationId(medication.getUid());
                     medicationResponseDto.setWeight(medication.getWeight());
+                    medicationResponseDto.setDroneId(medication.getDrone().getUid());
+                    medicationResponseDto.setImageId(medication.getImg_uid());
                     return medicationResponseDto;
                 }).collect(Collectors.toList());
     }

@@ -3,19 +3,16 @@ package musala.drones.controller;
 
 
 import lombok.extern.slf4j.Slf4j;
-import lombok.var;
 import musala.drones.dto.BaseResponseDto;
 import musala.drones.dto.DroneRegistrationDto;
 import musala.drones.dto.MedicationDto;
 import musala.drones.exception.NotFoundException;
 import musala.drones.implementation.DroneServiceImpl;
 import musala.drones.implementation.MedicationServiceImpl;
-import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -23,16 +20,13 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
-import java.io.File;
 import java.io.IOException;
-import java.time.LocalDate;
-import java.util.Base64;
 import java.util.UUID;
 
 @Slf4j
 @RestController
 @RequestMapping("api/v1/drones")
-public class dispatchController {
+public class DispatchController {
 
     @Autowired
     DroneServiceImpl droneService;
