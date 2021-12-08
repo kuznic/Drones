@@ -182,6 +182,20 @@ public class DispatchControllerTest
 
 
 
+    @Test
+    @WithMockUser(username = "user", password = "userpasssword", roles = "USER")
+    public void getDroneBatteryLevel_success() throws Exception {
+        mockMvc.perform(get("/api/v1/drones/battery-level/06364cbc-9468-4bfe-a917-1ab641bd49f1")
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .accept(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(ResultMatcher.matchAll(mvcResult -> {
+                    log.info(mvcResult.getResponse().getContentAsString());
+                }))
+                .andExpect(status().isOk());
+    }
+
+
+
 
 
 
