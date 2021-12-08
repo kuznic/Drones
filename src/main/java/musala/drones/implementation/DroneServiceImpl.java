@@ -191,7 +191,7 @@ public class DroneServiceImpl implements DroneService {
         }
 
     @Override
-    @Scheduled(fixedRate = 100000)
+    @Scheduled(fixedRate = 60000)
     public void checkDronesBattLevels() {
         List<BatteryLevelDto> battLevels  =  droneRepo.findAll().stream()
                 .map(drones-> {
