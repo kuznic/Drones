@@ -12,8 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.mock.web.MockPart;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -22,13 +20,13 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
@@ -81,9 +79,7 @@ public class DispatchControllerTest
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(gson.toJson(payload)))
-                .andExpect(ResultMatcher.matchAll(mvcResult -> {
-            log.info(mvcResult.getResponse().getContentAsString());
-        })).andExpect(status().isOk());
+                .andExpect(ResultMatcher.matchAll(mvcResult -> log.info(mvcResult.getResponse().getContentAsString()))).andExpect(status().isOk());
     }
 
 
@@ -94,9 +90,7 @@ public class DispatchControllerTest
        mockMvc.perform(get("/api/v1/drones")
                .contentType(MediaType.APPLICATION_JSON_VALUE)
                .accept(MediaType.APPLICATION_JSON_VALUE))
-                .andExpect(ResultMatcher.matchAll(mvcResult -> {
-        log.info(mvcResult.getResponse().getContentAsString());
-    })).andExpect(status().isOk());
+                .andExpect(ResultMatcher.matchAll(mvcResult -> log.info(mvcResult.getResponse().getContentAsString()))).andExpect(status().isOk());
     }
 
 
@@ -106,9 +100,7 @@ public class DispatchControllerTest
         mockMvc.perform(get("/api/v1/drones/06364cbc-9468-4bfe-a917-1ab641bd49f1")
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .accept(MediaType.APPLICATION_JSON_VALUE))
-                .andExpect(ResultMatcher.matchAll(mvcResult -> {
-                    log.info(mvcResult.getResponse().getContentAsString());
-                }))
+                .andExpect(ResultMatcher.matchAll(mvcResult -> log.info(mvcResult.getResponse().getContentAsString())))
                 .andExpect(status().isOk());
     }
 
@@ -138,9 +130,7 @@ public class DispatchControllerTest
         mockMvc.perform(get("/api/v1/drones/available-for-loading")
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .accept(MediaType.APPLICATION_JSON_VALUE))
-                .andExpect(ResultMatcher.matchAll(mvcResult -> {
-                    log.info(mvcResult.getResponse().getContentAsString());
-                })).andExpect(status().isOk());
+                .andExpect(ResultMatcher.matchAll(mvcResult -> log.info(mvcResult.getResponse().getContentAsString()))).andExpect(status().isOk());
     }
 
 
@@ -148,12 +138,13 @@ public class DispatchControllerTest
 //    @Test
 //    @WithMockUser(username = "user", password = "userpasssword", roles = "USER")
 //    public void addMedication_success() throws Exception {
-//        Map<String,String> payload = new HashMap<>();
 //
-//        payload.put("name", "Propane");
-//        payload.put("weight","40");
-//        payload.put("code","CODE12");
-//        payload.put("droneId", "06364cbc-9468-4bfe-a917-1ab641bd49f1");
+//
+//        LinkedMultiValueMap<String, String> medication = new LinkedMultiValueMap<>();
+//        medication.add("name", "Propane");
+//        medication.add("weight", "40");
+//        medication.add("code", "CODE12");
+//        medication.add("droneId","06364cbc-9468-4bfe-a917-1ab641bd49f1");
 //
 //
 //        MockMultipartFile file = new MockMultipartFile("file", "hello.jpg",
@@ -162,23 +153,21 @@ public class DispatchControllerTest
 //
 //        mockMvc.perform(multipart("/api/v1/drones/add-medication")
 //                .file(file)
-//                        .contentType(MediaType.APPLICATION_JSON_VALUE)
-//                        .content(gson.toJson(payload)))
+//                       // .params(medication)
+//                        .param("medication", medication.toString()))
 //                .andExpect(status().isOk());
 //    }
-
-
-    @Test
-    @WithMockUser(username = "user", password = "userpasssword", roles = "USER")
-    public void getAllDroneMedications_success() throws Exception
-    {
-        mockMvc.perform(get("/api/v1/drones/drone-medications/06364cbc-9468-4bfe-a917-1ab641bd49f1")
-                        .contentType(MediaType.APPLICATION_JSON_VALUE)
-                        .accept(MediaType.APPLICATION_JSON_VALUE))
-                .andExpect(ResultMatcher.matchAll(mvcResult -> {
-                    log.info(mvcResult.getResponse().getContentAsString());
-                })).andExpect(status().isOk());
-    }
+//
+//
+//    @Test
+//    @WithMockUser(username = "user", password = "userpasssword", roles = "USER")
+//    public void getAllDroneMedications_success() throws Exception
+//    {
+//        mockMvc.perform(get("/api/v1/drones/drone-medications/06364cbc-9468-4bfe-a917-1ab641bd49f1")
+//                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+//                        .accept(MediaType.APPLICATION_JSON_VALUE))
+//                .andExpect(ResultMatcher.matchAll(mvcResult -> log.info(mvcResult.getResponse().getContentAsString()))).andExpect(status().isOk());
+//    }
 
 
 
@@ -188,9 +177,7 @@ public class DispatchControllerTest
         mockMvc.perform(get("/api/v1/drones/battery-level/06364cbc-9468-4bfe-a917-1ab641bd49f1")
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .accept(MediaType.APPLICATION_JSON_VALUE))
-                .andExpect(ResultMatcher.matchAll(mvcResult -> {
-                    log.info(mvcResult.getResponse().getContentAsString());
-                }))
+                .andExpect(ResultMatcher.matchAll(mvcResult -> log.info(mvcResult.getResponse().getContentAsString())))
                 .andExpect(status().isOk());
     }
 
