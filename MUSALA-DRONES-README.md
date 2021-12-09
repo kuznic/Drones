@@ -8,6 +8,8 @@ This is in fulfilment of the assignment tasks.
 During the course of creating this application 
 some assumptions and choices were made. Some of 
 those choices/assumptions include the following:
+- The application is written in the JAVA programming language and
+uses teh SpringBoot framework
 - The application uses h2 database as the internal database
 - The application implements a basic form of Spring Security 
 and authentication happens in-memory
